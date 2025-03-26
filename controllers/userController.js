@@ -1,3 +1,8 @@
+/**
+ * @module userController
+ * @description Controller for handling user authentication and session management.
+ */
+
 require('dotenv').config();
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
@@ -5,17 +10,17 @@ const User = require('../models/user.models');
 
 
 /**
- * Handles user sign-up by creating a new user with hashed password.
- * 
- * @async
+ * Registers a new user.
  * @function signUp
- * @param {Object} req - The request object.
- * @param {Object} req.body - The request body.
- * @param {string} req.body.username - The username of the user.
- * @param {string} req.body.email - The email of the user.
- * @param {string} req.body.password - The plain text password of the user.
- * @param {Object} res - The response object.
- * @returns {Promise<void>} Sends a JSON response with a success message or an error message.
+ * @async
+ * @param {Object} req - Express request object.
+ * @param {Object} req.body - Request body containing user details.
+ * @param {string} req.body.username - Username of the new user.
+ * @param {string} req.body.email - Email of the new user.
+ * @param {string} req.body.password - Password of the new user.
+ * @param {Object} res - Express response object.
+ * @param {Function} next - Express next middleware function.
+ * @returns {Promise<void>} Sends a response with a success message or an error.
  */
 module.exports.signUp = async (req, res, next) => {
 
@@ -41,16 +46,17 @@ module.exports.signUp = async (req, res, next) => {
 };
 
 /**
- * Handles user sign-in by authenticating the user and generating a JWT.
+ * Logs in an existing user.
  * 
- * @async
  * @function signIn
- * @param {Object} req - The request object.
- * @param {Object} req.body - The request body.
- * @param {string} req.body.email - The email of the user.
- * @param {string} req.body.password - The plain text password of the user.
- * @param {Object} res - The response object.
- * @returns {Promise<void>} Sends a JSON response with a JWT token or an error message.
+ * @async
+ * @param {Object} req - Express request object.
+ * @param {Object} req.body - Request body containing login credentials.
+ * @param {string} req.body.email - Email of the user.
+ * @param {string} req.body.password - Password of the user.
+ * @param {Object} res - Express response object.
+ * @param {Function} next - Express next middleware function.
+ * @returns {Promise<void>} Sends a response with a success message or an error.
  */
 module.exports.signIn = async (req, res, next) => {
     try {
@@ -80,14 +86,16 @@ module.exports.signIn = async (req, res, next) => {
 
 
 
+
 /**
- * Handles user sign-out by clearing the token or session.
+ * Logs out the currently authenticated user.
  * 
- * @async
  * @function signOut
- * @param {Object} req - The request object.
- * @param {Object} res - The response object.
- * @returns {Promise<void>} Sends a JSON response with a success message or an error message.
+ * @async
+ * @param {Object} req - Express request object.
+ * @param {Object} res - Express response object.
+ * @param {Function} next - Express next middleware function.
+ * @returns {Promise<void>} Sends a response with a success message or an error.
  */
 module.exports.signOut = async (req, res, next) => {
     try {
