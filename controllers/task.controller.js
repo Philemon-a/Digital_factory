@@ -33,10 +33,9 @@ module.exports.getUserTasks = async (req, res) => {
  */
 module.exports.createTasks = async (req, res) => {
     try {
-        const { title } = req.body;
         const task = new Task({
             user: res.locals.userId,
-            title,
+            title: req.body.task,
         });
         await task.save();
         res.status(201).json(task);
@@ -58,7 +57,7 @@ module.exports.createTasks = async (req, res) => {
  * @param {Object} res - Express response object.
  * @returns {Promise<void>} Responds with the updated task or an error message.
  */
-module.exports.updateTasks = async (req, res) => {
+module.exports.updateTasks = async (req, res, next) => {
     try {
         // Find task ensuring it belongs to the logged-in user
         const task = await Task.findOne({ _id: req.params.id, user: res.locals.userId });
@@ -70,7 +69,7 @@ module.exports.updateTasks = async (req, res) => {
         await task.save();
         res.json(task);
     } catch (err) {
-        res.status(500).json({ message: 'Error updating task' });
+        next(err)
     }
 }
 
@@ -83,13 +82,13 @@ module.exports.updateTasks = async (req, res) => {
  * @param {Object} res - Express response object.
  * @returns {Promise<void>} Responds with a success message or an error message.
  */
-module.exports.deleteTasks = async (req, res) => {
+module.exports.deleteTasks = async (req, res, next) => {
     try {
         // Ensure the task to delete belongs to the logged-in user
         const task = await Task.findOneAndDelete({ _id: req.params.id, user: res.locals.userId });
         if (!task) return res.status(404).json({ message: 'Task not found' });
         res.json({ message: 'Task deleted successfully' });
     } catch (err) {
-        res.status(500).json({ message: 'Error deleting task' });
+        next(err)
     }
 }

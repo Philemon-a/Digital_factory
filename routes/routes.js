@@ -1,5 +1,5 @@
 const express = require('express');
-const { signUp, signIn, signOut, getUser } = require('../controllers/user.controller');
+const { signUp, signIn, signOut } = require('../controllers/user.controller');
 const { getUserTasks, createTasks, updateTasks, deleteTasks } = require('../controllers/task.controller');
 const { authMiddleware } = require('../middleware/auth')
 const { inputErrorHandler } = require('../middleware/inputErrorHandler')
@@ -23,25 +23,26 @@ router.post('/signIn',
 )
 router.post('/signOut', signOut)
 
-
 // Routes for Tasks
 
 router.use(authMiddleware)
-router.get('/get-user', getUser)
-router.get('/tasks', getUserTasks)
-router.post('/task',
-    body('title').notEmpty(),
+router.get('/get-user', (req, res) => {
+    res.send(res.locals.userId)
+})
+router.get('/get-tasks', getUserTasks)
+router.post('/add-task',
+    body('task').notEmpty(),
     createTasks
 )
-router.put('/task/:id', 
-    param('_id').notEmpty(),
+router.put('/edit-task/:id/:user', 
+    param('id').notEmpty(),
     param('user').notEmpty(),
     body('title').notEmpty(),
     updateTasks
 )
-router.delete('/task/:id',
-    param('_id').notEmpty(),
-    param('user').notEmpty, 
+router.delete('/delete-task/:id/:user',
+    param('id').notEmpty(),
+    param('user').notEmpty(), 
     deleteTasks
 )
 
