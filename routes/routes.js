@@ -1,5 +1,5 @@
 const express = require('express');
-const { signUp, signIn, signOut } = require('../controllers/user.controller');
+const { signUp, signIn, signOut, getUser } = require('../controllers/user.controller');
 const { getUserTasks, createTasks, updateTasks, deleteTasks } = require('../controllers/task.controller');
 const { authMiddleware } = require('../middleware/auth')
 const { inputErrorHandler } = require('../middleware/inputErrorHandler')
@@ -27,16 +27,15 @@ router.post('/signOut', signOut)
 // Routes for Tasks
 
 router.use(authMiddleware)
+router.get('/get-user', getUser)
 router.get('/tasks', getUserTasks)
 router.post('/task',
-    body('description').notEmpty(),
     body('title').notEmpty(),
     createTasks
 )
 router.put('/task/:id', 
     param('_id').notEmpty(),
     param('user').notEmpty(),
-    body('description').notEmpty(),
     body('title').notEmpty(),
     updateTasks
 )

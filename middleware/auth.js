@@ -18,8 +18,11 @@ require('dotenv').config();
  * @throws {Error} Responds with a 401 status code if the token is missing or invalid.
  */
 module.exports.authMiddleware = async (req, res, next) => {
-  const token = req.cookies['authorization']; // Access the 'authorization' cookie
-  if (!token) return res.status(401).json({ message: 'No token provided' });
+  const token = req.session.token;
+  console.log('TOKEN ', token)
+  if (!token) {
+    return res.status(401).json({ message: 'Missing token' });
+  }
 
   jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
     if (err) return res.status(401).json({ message: 'Invalid token' });

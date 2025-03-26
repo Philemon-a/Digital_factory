@@ -29,12 +29,6 @@ module.exports.signUp = async(req, res) => {
         const hashedPassword = await bcrypt.hash(password, 10);
         const user = new User({ username, email, password: hashedPassword });
         await user.save();
-        const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
-        res.cookie('token', token, {
-            httpOnly: true, // Prevents client-side JavaScript from accessing the cookie
-            // secure: process.env.NODE_ENV === 'production', // Ensures the cookie is sent over HTTPS in production
-            maxAge: 3600000, // Cookie expiration time in milliseconds (1 hour)
-          });
         res.status(201).json({ message: 'User registered successfully' });
     } catch (err) {
         next(err)
@@ -54,31 +48,33 @@ module.exports.signUp = async(req, res) => {
  * @param {Object} res - The response object.
  * @returns {Promise<void>} Sends a JSON response with a JWT token or an error message.
  */
-module.exports.signIn = async(req, res)=>{
+module.exports.signIn = async (req, res, next) => {
     try {
         const { email, password } = req.body;
         // Find the user by email
         const user = await User.findOne({ email });
-        if (!user)
-          return res.status(401).json({ message: 'Invalid credentials' });
+        if (!user) {
+            return res.status(401).json({ message: 'Invalid credentials' });
+        }
         
         // Compare provided password with hashed password
         const passwordMatch = await bcrypt.compare(password, user.password);
-        if (!passwordMatch)
-          return res.status(401).json({ message: 'Invalid credentials' });
+        if (!passwordMatch) {
+            return res.status(401).json({ message: 'Invalid credentials' });
+        }
         
         // Generate JWT
         const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
-        res.cookie('token', token, {
-            httpOnly: true, // Prevents client-side JavaScript from accessing the cookie
-            // secure: process.env.NODE_ENV === 'production', // Ensures the cookie is sent over HTTPS in production
-            maxAge: 3600000, // Cookie expiration time in milliseconds (1 hour)
-          });
+        
+        // Set the token as a cookie
+        req.session.token = token
+        console.log(token, req.session.token)
         res.json({ 
-            message: "Logged in successfully" 
-         });
-      } catch (err) {
-       next(err)
+            message: "Logged in successfully",
+            username: user.username
+        });
+    } catch (err) {
+        next(err);
     }
 };
 
@@ -102,3 +98,15 @@ module.exports.signOut = async(req, res) => {
         next(err)
     }
 };
+
+
+module.exports.getUser = async (req, res) =>{
+    try {
+        const user = await User.findOne({_id : res.local.useId})
+        res.send(user)
+
+    } catch (err) {
+        next(err)
+        
+    }
+}

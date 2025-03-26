@@ -33,11 +33,10 @@ module.exports.getUserTasks = async (req, res) => {
  */
 module.exports.createTasks = async (req, res) => {
     try {
-        const { title, description } = req.body;
+        const { title } = req.body;
         const task = new Task({
             user: res.locals.userId,
             title,
-            description,
         });
         await task.save();
         res.status(201).json(task);
@@ -65,9 +64,8 @@ module.exports.updateTasks = async (req, res) => {
         const task = await Task.findOne({ _id: req.params.id, user: res.locals.userId });
         if (!task) return res.status(404).json({ message: 'Task not found' });
 
-        const { title, description } = req.body;
+        const { title } = req.body;
         if (title !== undefined) task.title = title;
-        if (description !== undefined) task.description = description;
 
         await task.save();
         res.json(task);
