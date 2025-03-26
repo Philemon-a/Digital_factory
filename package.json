@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "NODE_ENV=test jest",
     "start": "node app.js",
     "dev": "nodemon app.js"
   },
@@ -24,6 +24,9 @@
     "mongoose": "^8.12.2"
   },
   "devDependencies": {
-    "nodemon": "^3.1.9"
+    "jest": "^29.7.0",
+    "node-mocks-http": "^1.16.2",
+    "nodemon": "^3.1.9",
+    "supertest": "^7.1.0"
   }
 }

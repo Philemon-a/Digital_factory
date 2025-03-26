@@ -91,19 +91,18 @@ module.exports.signIn = async (req, res, next) => {
  */
 module.exports.signOut = async (req, res, next) => {
     try {
-        const { email } = req.body;
-
-        // Find the user by email
-        const user = await User.findOne({ email });
-        if (!user) {
-            return res.status(404).json({ message: 'User not found' });
+        if (req.session) {
+            req.session.destroy((err) => {
+                if (err) {
+                    return next(err);
+                }
+            });
         }
-
-        // Remove the token from the user's record
-        await User.updateOne({ email }, { $unset: { token: "" } });
-
         res.status(200).json({ message: 'User signed out successfully' });
     } catch (err) {
         next(err);
     }
 };
+
+
+

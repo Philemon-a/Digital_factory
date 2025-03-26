@@ -1,6 +1,6 @@
 const express = require('express');
-const { signUp, signIn, signOut } = require('../controllers/user.controller');
-const { getUserTasks, createTasks, updateTasks, deleteTasks } = require('../controllers/task.controller');
+const { signUp, signIn, signOut } = require('../controllers/userController');
+const { getUserTasks, createTasks, updateTasks, deleteTasks } = require('../controllers/taskController');
 const { authMiddleware } = require('../middleware/auth')
 const { inputErrorHandler } = require('../middleware/inputErrorHandler')
 const { body, param } = require('express-validator');
@@ -21,7 +21,7 @@ router.post('/signIn',
     inputErrorHandler,
     signIn
 )
-router.post('/signOut', signOut)
+
 
 // Routes for Tasks
 
@@ -46,5 +46,6 @@ router.delete('/delete-task/:id/:user',
     deleteTasks
 )
 
+router.get("/signOut", signOut)
 
 module.exports = router;
