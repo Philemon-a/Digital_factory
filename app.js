@@ -24,6 +24,9 @@ app.use(session({
 }))
 // app.use(cookieParser());  
 app.use(bodyParser.json());
+app.get('/', (req, res)=>{
+  res.send('welcome to my page')
+})
 app.use(cors({
   origin: 'http://localhost:3000',
   credentials: true
