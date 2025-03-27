@@ -4,27 +4,26 @@ require('dotenv').config();
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const routes = require('./routes/routes')
-const {globalErrorHandler} = require('./middleware/globalErrorHandler')
+const { globalErrorHandler } = require('./middleware/globalErrorHandler')
 // const cookieParser = require('cookie-parser');
 const session = require('express-session');
 
 
-const PORT = 4444;
 const app = express();
 app.use(express.json());
 app.use(session({
-  secret: process.env.SESSION_SECRET, 
-    resave: false,                    
-    saveUninitialized: true,           
-    cookie: {
-        // secure: false,                
-        httpOnly: true,                
-        maxAge: 3600000                
-    }
+  secret: process.env.SESSION_SECRET,
+  resave: false,
+  saveUninitialized: true,
+  cookie: {
+    // secure: false,                
+    httpOnly: true,
+    maxAge: 3600000
+  }
 }))
 // app.use(cookieParser());  
 app.use(bodyParser.json());
-app.get('/', (req, res)=>{
+app.get('/', (req, res) => {
   res.send('welcome to my page')
 })
 app.use(cors({
@@ -49,12 +48,11 @@ app.use(globalErrorHandler)
 module.exports = app;
 
 
-if (process.env.NODE_ENV !== 'test') {
-  const PORT = process.env.PORT || 4444;
-  app.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`);
-  });
-}
+const PORT = process.env.PORT || 4444;
+app.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}`);
+});
+
 
 
 
