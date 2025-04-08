@@ -27,7 +27,7 @@ app.get('/', (req, res) => {
   res.send('welcome to my page')
 })
 app.use(cors({
-  origin: 'http://localhost:3000',
+  origin: 'https://digital-factory-frontend.vercel.app',
   credentials: true
 }));
 

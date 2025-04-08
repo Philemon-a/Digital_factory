@@ -10,10 +10,10 @@ describe('Express App Configuration', () => {
   it('should include CORS headers on preflight request', async () => {
     const res = await request(app)
       .options('/')
-      .set('Origin', 'http://localhost:3000')
+      .set('Origin', 'https://digital-factory-frontend.vercel.app/')
       .set('Access-Control-Request-Method', 'GET');
 
-    expect(res.headers['access-control-allow-origin']).toBe('http://localhost:3000');
+    expect(res.headers['access-control-allow-origin']).toBe('https://digital-factory-frontend.vercel.app/');
     expect(res.headers['access-control-allow-credentials']).toBe('true');
   });
 
