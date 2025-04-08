@@ -16,7 +16,7 @@ app.use(session({
   resave: false,
   saveUninitialized: true,
   cookie: {
-    // secure: false,                
+    secure: false,                
     httpOnly: true,
     maxAge: 3600000
   }
@@ -28,7 +28,7 @@ app.get('/', (req, res) => {
 })
 app.use(cors({
   origin: 'https://digital-factory-frontend.vercel.app',
-  credentials: true
+  credentials: true, 
 }));
 
 app.use(express.urlencoded({ extended: true }));
