@@ -11,9 +11,10 @@ const session = require('express-session');
 
 const app = express();
 app.use(express.json());
+// app.use(express.urlencoded({ extended: true }));
 app.use(session({
   secret: process.env.SESSION_SECRET,
-  resave: false,
+  resave: true,
   saveUninitialized: true,
   cookie: {
     secure: true,                
@@ -31,7 +32,6 @@ app.use(cors({
   credentials: true, 
 }));
 
-app.use(express.urlencoded({ extended: true }));
 app.post('/echo', (req, res) => {
   res.json(req.body);
 });
