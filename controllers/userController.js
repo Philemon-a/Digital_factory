@@ -42,7 +42,7 @@ module.exports.signUp = async (req, res, next) => {
             secure: process.env.NODE_ENV === 'production', // Set to true if using HTTPS
             maxAge: 3600000, // 1 hour
         })
-        console.log("Cookie set:", res.cookies.fortune);
+        console.log("Cookie set:", res.cookie.fortune);
         res.status(201).json({ message: 'User registered successfully' });
     } catch (err) {
         next(err)
