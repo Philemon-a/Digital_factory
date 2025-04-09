@@ -27,7 +27,7 @@ router.post('/signIn',
 
 router.use(authMiddleware)
 router.get('/get-user', (req, res) => {
-    res.send(res.locals.userId)
+    res.json({userId: res.locals.userId})
 })
 router.get('/get-tasks', getUserTasks)
 router.post('/add-task',

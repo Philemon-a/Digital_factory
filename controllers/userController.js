@@ -37,7 +37,12 @@ module.exports.signUp = async (req, res, next) => {
         const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
         await user.save();
 
-        req.session.token = token
+        res.cookie("token", token, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production', // Set to true if using HTTPS
+            maxAge: 3600000, // 1 hour
+        })
+        console.log("Cookie set:", res.cookie.token);
         res.status(201).json({ message: 'User registered successfully' });
     } catch (err) {
         next(err)
@@ -74,8 +79,11 @@ module.exports.signIn = async (req, res, next) => {
         // Generate JWT
         const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
         await user.save();
-
-        req.session.token = token
+        res.cookie("fortune", token, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production', // Set to true if using HTTPS
+            maxAge: 3600000, // 1 hour
+        })
         res.json({
             message: "Logged in successfully"
         });
@@ -99,13 +107,7 @@ module.exports.signIn = async (req, res, next) => {
  */
 module.exports.signOut = async (req, res, next) => {
     try {
-        if (req.session) {
-            req.session.destroy((err) => {
-                if (err) {
-                    return next(err);
-                }
-            });
-        }
+        res.clearCookie("fortune");
         res.status(200).json({ message: 'User signed out successfully' });
     } catch (err) {
         next(err);
