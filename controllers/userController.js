@@ -79,11 +79,13 @@ module.exports.signIn = async (req, res, next) => {
         // Generate JWT
         const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
         await user.save();
+        console.log("TOKEN HERE", token);
         res.cookie("fortune", token, {
             httpOnly: true,
             secure: process.env.NODE_ENV === 'production', // Set to true if using HTTPS
             maxAge: 3600000, // 1 hour
         })
+        console.log("Cookie set:", res.cookies);
         res.json({
             message: "Logged in successfully"
         });
