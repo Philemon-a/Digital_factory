@@ -31,7 +31,7 @@ app.use(cors({
   origin: ['https://digital-factory-frontend.vercel.app', 'http://localhost:3000'],
   credentials: true, 
 }));
-
+app.set('trust proxy', 1)
 app.post('/echo', (req, res) => {
   res.json(req.body);
 });
