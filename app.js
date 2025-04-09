@@ -16,7 +16,7 @@ app.use(session({
   resave: false,
   saveUninitialized: true,
   cookie: {
-    secure: false,                
+    secure: true,                
     httpOnly: true,
     maxAge: 3600000
   }
@@ -38,7 +38,6 @@ app.post('/echo', (req, res) => {
 app.use(routes);
 app.use((req, res, next) => {
   res.status(404).json({ message: 'Not Found' });
-
 });
 if (process.env.NODE_ENV !== 'test') {
   connectDB();
