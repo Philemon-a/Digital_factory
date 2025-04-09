@@ -20,9 +20,9 @@ const jwt = require('jsonwebtoken');
 module.exports.authMiddleware = async (req, res, next) => {
     try {
         const cookie = res.getHeader('Set-Cookie');
+        console.log("authtoken: ", cookie);
         const parts = cookie.split('; ');         
         const token = parts[0].slice(8);
-        console.log("authtoken:", token);
         if (!token) {
             return res.status(401).json({ message: 'Unauthorized: Token not found' });
         }
