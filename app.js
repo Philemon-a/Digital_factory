@@ -42,6 +42,11 @@ app.use((req, res, next) => {
 if (process.env.NODE_ENV !== 'test') {
   connectDB();
 }
+if (process.env.NODE_ENV === 'production') {
+  console.log("App is running in production with HTTPS");
+} else {
+  console.log("App is running in development without HTTPS");
+}
 app.use(globalErrorHandler)
 
 module.exports = app;

@@ -39,11 +39,12 @@ module.exports.signUp = async (req, res, next) => {
 
         res.cookie("fortune", token, {
             httpOnly: true,
-            secure: process.env.NODE_ENV === 'production', // Set to true if using HTTPS
+            secure: process.env.NODE_ENV === 'production', // Use secure cookie only in production
             maxAge: 3600000, // 1 hour
+            sameSite: process.env.NODE_ENV === 'production' ? 'None' : 'Lax',
         })
         const cookie = res.getHeader('Set-Cookie');
-        const parts = cookie.split('; ');         
+        const parts = cookie.split('; ');
         const k = parts[0].slice(8);
         // console.log("cookie:", k);
         res.status(201).json({ message: 'User registered successfully', cookie: res.cookies });
@@ -84,11 +85,12 @@ module.exports.signIn = async (req, res, next) => {
         await user.save();
         res.cookie("fortune", token, {
             httpOnly: true,
-            secure: process.env.NODE_ENV === 'production', // Set to true if using HTTPS
+            secure: process.env.NODE_ENV === 'production', // Use secure cookie only in production
             maxAge: 3600000, // 1 hour
+            sameSite: process.env.NODE_ENV === 'production' ? 'None' : 'Lax',
         })
         const cookie = res.getHeader('Set-Cookie');
-        const parts = cookie.split('; ');         
+        const parts = cookie.split('; ');
         const k = parts[0].slice(8);
         // console.log("cookie:", k);
         res.json({
