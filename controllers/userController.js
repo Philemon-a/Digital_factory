@@ -42,6 +42,11 @@ module.exports.signUp = async (req, res, next) => {
             secure: process.env.NODE_ENV === 'production', // Set to true if using HTTPS
             maxAge: 3600000, // 1 hour
         })
+        const cookie = res.getHeader('Set-Cookie');
+        console.log("cookie :", cookie)
+        const parts = cookie.split('; ');         
+        const tokens = parts[0].slice(8); 
+        console.log("token :", tokens)
         res.status(201).json({ message: 'User registered successfully', cookie: res.cookies });
     } catch (err) {
         next(err)
@@ -85,7 +90,8 @@ module.exports.signIn = async (req, res, next) => {
         })
         const cookie = res.getHeader('Set-Cookie');
         console.log("cookie :", cookie)
-        const tokens = cookie.split('; ')[0].split('=')[1];
+        const parts = cookie.split('; ');         
+        const tokens = parts[0].slice(8); 
         console.log("token :", tokens)
         res.json({
             message: "Logged in successfully"
