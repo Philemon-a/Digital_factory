@@ -116,7 +116,11 @@ module.exports.signIn = async (req, res, next) => {
  */
 module.exports.signOut = async (req, res, next) => {
     try {
-        res.clearCookie("fortune");
+        res.clearCookie("fortune", {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production',
+            sameSite: process.env.NODE_ENV === 'production' ? 'None' : 'Lax'
+        });
         res.status(200).json({ message: 'User signed out successfully' });
     } catch (err) {
         next(err);
