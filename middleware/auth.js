@@ -18,23 +18,25 @@ const jwt = require('jsonwebtoken');
  * @throws {Error} Responds with a 401 status code if the token is missing or invalid.
  */
 module.exports.authMiddleware = async (req, res, next) => {
-  try {
-    const token = req.cookies.fortune 
-    console.log("TOKEN", token)
-    console.log("Route", req.path)
-    if (!token) {
-        return res.status(401).json({ message: 'Unauthorized: Token not found' });
-    }
-
-    jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
-        if (err) {
-            return res.status(401).json({ message: 'Invalid token' });
+    try {
+        const cookie = res.getHeader('Set-Cookie');
+        const token = cookie.split('; ')[0].split('=')[1];
+        if (!token) {
+            return res.status(401).json({ message: 'Unauthorized: Token not found' });
         }
 
-        res.locals.userId = decoded.id;
-        next();
-    });
-} catch (err) {
-    res.status(500).json({ message: 'Server error', error: err.message });
-}
+        jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
+            if (err) {
+                return res.status(401).json({ message: 'Invalid token' });
+            }
+            res.locals.userId = decoded.id;
+            next();
+        });
+    } catch (err) {
+        res.status(500).json({ message: 'Server error', error: err.message });
+    }
 };
+
+
+
+

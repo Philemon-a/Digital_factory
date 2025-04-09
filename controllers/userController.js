@@ -42,8 +42,7 @@ module.exports.signUp = async (req, res, next) => {
             secure: process.env.NODE_ENV === 'production', // Set to true if using HTTPS
             maxAge: 3600000, // 1 hour
         })
-        console.log("Cookie set:", res.cookie.fortune);
-        res.status(201).json({ message: 'User registered successfully' });
+        res.status(201).json({ message: 'User registered successfully', cookie: res.cookies });
     } catch (err) {
         next(err)
     }
@@ -79,13 +78,15 @@ module.exports.signIn = async (req, res, next) => {
         // Generate JWT
         const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
         await user.save();
-        console.log("TOKEN HERE", token);
         res.cookie("fortune", token, {
             httpOnly: true,
             secure: process.env.NODE_ENV === 'production', // Set to true if using HTTPS
             maxAge: 3600000, // 1 hour
         })
-        console.log("Cookie set:", res.cookies);
+        const cookie = res.getHeader('Set-Cookie');
+        console.log("cookie :", cookie)
+        const tokens = cookie.split('; ')[0].split('=')[1];
+        console.log("token :", tokens)
         res.json({
             message: "Logged in successfully"
         });
