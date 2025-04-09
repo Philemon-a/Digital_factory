@@ -43,10 +43,9 @@ module.exports.signUp = async (req, res, next) => {
             maxAge: 3600000, // 1 hour
         })
         const cookie = res.getHeader('Set-Cookie');
-        console.log("cookie :", cookie)
         const parts = cookie.split('; ');         
-        const tokens = parts[0].slice(8); 
-        console.log("token :", tokens)
+        const k = parts[0].slice(8);
+        console.log("cookie:", k);
         res.status(201).json({ message: 'User registered successfully', cookie: res.cookies });
     } catch (err) {
         next(err)
@@ -89,10 +88,9 @@ module.exports.signIn = async (req, res, next) => {
             maxAge: 3600000, // 1 hour
         })
         const cookie = res.getHeader('Set-Cookie');
-        console.log("cookie :", cookie)
         const parts = cookie.split('; ');         
-        const tokens = parts[0].slice(8); 
-        console.log("token :", tokens)
+        const k = parts[0].slice(8);
+        console.log("cookie:", k);
         res.json({
             message: "Logged in successfully"
         });

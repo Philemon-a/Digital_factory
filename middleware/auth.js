@@ -22,6 +22,7 @@ module.exports.authMiddleware = async (req, res, next) => {
         const cookie = res.getHeader('Set-Cookie');
         const parts = cookie.split('; ');         
         const token = parts[0].slice(8);
+        console.log("authtoken:", token);
         if (!token) {
             return res.status(401).json({ message: 'Unauthorized: Token not found' });
         }
