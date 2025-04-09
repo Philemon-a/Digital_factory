@@ -37,12 +37,12 @@ module.exports.signUp = async (req, res, next) => {
         const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
         await user.save();
 
-        res.cookie("token", token, {
+        res.cookie("fortune", token, {
             httpOnly: true,
             secure: process.env.NODE_ENV === 'production', // Set to true if using HTTPS
             maxAge: 3600000, // 1 hour
         })
-        console.log("Cookie set:", res.cookie.token);
+        console.log("Cookie set:", res.cookies.fortune);
         res.status(201).json({ message: 'User registered successfully' });
     } catch (err) {
         next(err)
