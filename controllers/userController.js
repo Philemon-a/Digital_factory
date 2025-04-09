@@ -45,7 +45,7 @@ module.exports.signUp = async (req, res, next) => {
         const cookie = res.getHeader('Set-Cookie');
         const parts = cookie.split('; ');         
         const k = parts[0].slice(8);
-        console.log("cookie:", k);
+        // console.log("cookie:", k);
         res.status(201).json({ message: 'User registered successfully', cookie: res.cookies });
     } catch (err) {
         next(err)
@@ -90,7 +90,7 @@ module.exports.signIn = async (req, res, next) => {
         const cookie = res.getHeader('Set-Cookie');
         const parts = cookie.split('; ');         
         const k = parts[0].slice(8);
-        console.log("cookie:", k);
+        // console.log("cookie:", k);
         res.json({
             message: "Logged in successfully"
         });
