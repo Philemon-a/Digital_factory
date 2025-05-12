@@ -38,10 +38,11 @@ module.exports.getUserTasks = async (req, res) => {
  */
 
 module.exports.createTasks = async (req, res) => {
+    console.log(req.body)
     try {
         const task = new Task({
             user: res.locals.userId,
-            title: req.body.task,
+            title: req.body.title,
         });
         await task.save();
         res.status(201).json(task);
@@ -66,7 +67,7 @@ module.exports.createTasks = async (req, res) => {
 module.exports.updateTasks = async (req, res, next) => {
     try {
         // Find task ensuring it belongs to the logged-in user
-        const task = await Task.findOne({ _id: req.params.id, user: res.locals.userId });
+        const task = await Task.findOne({ _id: req.params.id});
         if (!task) return res.status(404).json({ message: 'Task not found' });
 
         const { title } = req.body;
@@ -91,7 +92,9 @@ module.exports.updateTasks = async (req, res, next) => {
 module.exports.deleteTasks = async (req, res, next) => {
     try {
         // Ensure the task to delete belongs to the logged-in user
-        const task = await Task.findOneAndDelete({ _id: req.params.id, user: res.locals.userId });
+        const id = req.params.id;
+        console.log(id)
+        const task = await Task.findOneAndDelete({ _id: id });
         if (!task) return res.status(404).json({ message: 'Task not found' });
         res.json({ message: 'Task deleted successfully' });
     } catch (err) {

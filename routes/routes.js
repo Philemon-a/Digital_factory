@@ -31,18 +31,16 @@ router.get('/get-user', (req, res) => {
 })
 router.get('/get-tasks', getUserTasks)
 router.post('/add-task',
-    body('task').notEmpty(),
+    body('title').notEmpty(),
     createTasks
 )
-router.put('/edit-task/:id/:user', 
+router.put('/edit-task/:id', 
     param('id').notEmpty(),
-    param('user').notEmpty(),
     body('title').notEmpty(),
     updateTasks
 )
-router.delete('/delete-task/:id/:user',
+router.delete('/delete-task/:id',
     param('id').notEmpty(),
-    param('user').notEmpty(), 
     deleteTasks
 )
 
